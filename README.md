@@ -5,4 +5,5 @@
 ## Catalog
 
 **Architectures: Vertical Slice Architecture, CQRS.**
+
 **Databases: PostgreSQL.**
