@@ -13,11 +13,11 @@ public class CreateTrackResponse
 {
     public Guid Id { get; set; }
 }
-public class GetTracksEndpoint : ICarterModule
+public class CreateTrackEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/tracks", async ([FromBody] CreateTrackRequest request, ISender sender) =>
+        app.MapPost("api/tracks", async ([FromBody] CreateTrackRequest request, ISender sender) =>
         {
             var command = request.Adapt<CreateTrackCommand>();
             var result = await sender.Send(command);

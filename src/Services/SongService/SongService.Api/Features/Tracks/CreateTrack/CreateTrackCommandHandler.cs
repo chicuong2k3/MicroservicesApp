@@ -21,7 +21,8 @@ internal class CreateTrackCommandHandler(IDocumentSession documentSession)
             Name = command.Name,
             Description = command.Description,
             ThumbUrl = command.ThumbUrl,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.Now,
+            Genres = command.Genres
         };
 
         documentSession.Store(track);
