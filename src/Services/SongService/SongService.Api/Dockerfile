@@ -9,17 +9,17 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Services/Catalog/Catalog.Api/Catalog.Api.csproj", "Services/Catalog/Catalog.Api/"]
-RUN dotnet restore "./Services/Catalog/Catalog.Api/Catalog.Api.csproj"
+COPY ["Services/SongService/SongService.Api/SongService.Api.csproj", "Services/SongService/SongService.Api/"]
+RUN dotnet restore "./Services/SongService/SongService.Api/SongService.Api.csproj"
 COPY . .
-WORKDIR "/src/Services/Catalog/Catalog.Api"
-RUN dotnet build "./Catalog.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Services/SongService/SongService.Api"
+RUN dotnet build "./SongService.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Catalog.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./SongService.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Catalog.Api.dll"]
+ENTRYPOINT ["dotnet", "SongService.Api.dll"]

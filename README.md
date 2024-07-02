@@ -1,9 +1,9 @@
 # Microservices Ecommerce
 
-**Libraries used: MediatR, Mapster, Carter, Marten, FluentValidation.**
+**Common Libraries used in all Microservices: MediatR, Mapster, Carter, FluentValidation.**
 
 ## Catalog
 
 **Architectures: Vertical Slice Architecture, CQRS.**
 
-**Databases: PostgreSQL.**
+**Databases: PostgreSQL as a Document DB (using Marten library).**

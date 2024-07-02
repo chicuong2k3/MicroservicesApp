@@ -1,14 +1,12 @@
-﻿namespace Catalog.Api.Models
+﻿namespace SongService.Api.Models
 {
-    public class Product
+    public class Track
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = default!;
         public string Description { get; set; } = default!;
         public string ThumbUrl { get; set; } = default!;
-        public decimal OriginalPrice { get; set; }
-        public decimal SalePrice { get; set; }
         public DateTime CreatedAt { get; set; }
-        public List<string> Categories { get; set; } = new();
+        public List<string> Genres { get; set; } = new();
     }
 }
