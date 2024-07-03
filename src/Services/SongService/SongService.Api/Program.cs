@@ -1,6 +1,7 @@
 
 using Common.Behaviours;
 using Common.Exceptions.Handlers;
+using SongService.Api.Data;
 using Weasel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssemblies(assembly);
     config.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+    config.AddOpenBehavior(typeof(LoggingBehaviour<,>));
 });
 
 builder.Services.AddValidatorsFromAssembly(assembly);
@@ -23,6 +25,10 @@ builder.Services.AddMarten(options =>
 
 }).UseLightweightSessions();
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.InitializeMartenWith<DataInitial>();
+}
 
 builder.Services.AddCarter();
 
