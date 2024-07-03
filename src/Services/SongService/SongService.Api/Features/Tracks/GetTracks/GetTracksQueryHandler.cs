@@ -1,5 +1,4 @@
 ﻿
-
 namespace SongService.Api.Features.Tracks.GetTracks;
 
 public class GetTracksResult
@@ -8,7 +7,9 @@ public class GetTracksResult
 }
 public class GetTracksQuery : IQuery<GetTracksResult>
 {
-    public string Genre { get; set; } = string.Empty;
+    public string? Genre { get; set; }
+    public int? PageNumber { get; set; }
+    public int? PageSize { get; set; }
 }
 
 internal class GetTracksQueryHandler(IDocumentSession documentSession)
@@ -29,7 +30,7 @@ internal class GetTracksQueryHandler(IDocumentSession documentSession)
 
         return new GetTracksResult()
         {
-            Tracks = await tracks.ToListAsync(),
+            Tracks = await tracks.ToPagedListAsync(query?.PageNumber ?? 1, query?.PageSize ?? 10, cancellationToken)
         };
 
 

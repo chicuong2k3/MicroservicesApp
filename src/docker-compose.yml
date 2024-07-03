@@ -2,8 +2,15 @@ version: '3.4'
 
 services:
   
-  catalogdb: 
+  songservicedb: 
     image: postgres
 
+  songservice.api:
+    image: ${DOCKER_REGISTRY-}songserviceapi
+    build:
+      context: .
+      dockerfile: Services/SongService/SongService.Api/Dockerfile
+
 volumes:
-  postgres_catalog:
+  postgres_songservice:
+

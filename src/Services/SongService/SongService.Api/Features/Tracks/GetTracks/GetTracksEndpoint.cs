@@ -2,7 +2,9 @@
 
 public class GetTracksRequest
 {
-    public string? Genre { get; set; } = default!;
+    public string? Genre { get; set; }
+    public int? PageNumber { get; set; }
+    public int? PageSize { get; set; }
 }
 public class GetTracksResponse
 {
@@ -14,11 +16,7 @@ public class GetTracksEndpoint : ICarterModule
     {
         app.MapGet("api/tracks", async ([AsParameters] GetTracksRequest request, ISender sender) =>
         {
-            var query = new GetTracksQuery();
-            if (!string.IsNullOrEmpty(request.Genre))
-            {
-                query = request.Adapt<GetTracksQuery>();
-            }
+            var query = request.Adapt<GetTracksQuery>();
 
             var result = await sender.Send(query);
             var response = result.Adapt<GetTracksResponse>();

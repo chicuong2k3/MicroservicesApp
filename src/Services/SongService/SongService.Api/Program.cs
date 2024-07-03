@@ -1,6 +1,8 @@
 
 using Common.Behaviours;
 using Common.Exceptions.Handlers;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using SongService.Api.Data;
 using Weasel.Core;
 
@@ -16,9 +18,11 @@ builder.Services.AddMediatR(config =>
 
 builder.Services.AddValidatorsFromAssembly(assembly);
 
+var connectionString = builder.Configuration.GetConnectionString("Marten")!;
+
 builder.Services.AddMarten(options =>
 {
-    options.Connection(builder.Configuration.GetConnectionString("Marten")!);
+    options.Connection(connectionString);
     options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
     options.UseSystemTextJsonForSerialization();
     
@@ -34,11 +38,19 @@ builder.Services.AddCarter();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
+builder.Services.AddHealthChecks()
+    .AddNpgSql(connectionString);
+
 var app = builder.Build();
 
 app.UseExceptionHandler(options =>
 {
 
+});
+
+app.UseHealthChecks("/api/health", new HealthCheckOptions()
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
 //app.UseExceptionHandler(exceptionHandler =>

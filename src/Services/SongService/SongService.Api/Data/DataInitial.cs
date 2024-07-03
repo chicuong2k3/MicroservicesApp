@@ -6,7 +6,7 @@ namespace SongService.Api.Data
     {
         public async Task Populate(IDocumentStore store, CancellationToken cancellation)
         {
-            await using var session = store.LightweightSession();
+            var session = store.LightweightSession();
 
             if (await session.Query<Track>().AnyAsync())
             {
