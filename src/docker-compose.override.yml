@@ -1,28 +1,64 @@
 version: '3.4'
 
 services:
-  songservicedb:
-    container_name: songservicedb
+  catalogdb:
+    container_name: catalogdb
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1612003
-      - POSTGRES_DB=SongServiceDb
+      - POSTGRES_DB=CatalogDb
     restart: always
     ports:
       - "5432:5432"
     volumes:
-      - postgres_songservice:/var/lib/postgresql/data/
-  songservice.api:
+      - postgres_catalog:/var/lib/postgresql/data/
+
+  basketdb:
+    container_name: basketdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1612003
+      - POSTGRES_DB=BasketDb
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_basket:/var/lib/postgresql/data/
+
+  distributedcache:
+    container_name: distributedcache
+    restart: always
+    ports:
+      - "6379:6379" 
+
+  catalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__Marten=Host=songservicedb;Port=5432;Database=SongServiceDb;UserId=postgres;Password=1612003;Include Error Detail=true
+      - ConnectionStrings__Marten=Host=catalogdb;Port=5432;Database=CatalogDb;UserId=postgres;Password=1612003;Include Error Detail=true
     depends_on:
-      - songservicedb
+      - catalogdb
     ports:
       - "6000:8080"
       - "6060:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  basket.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Marten=Host=basketdb;Port=5432;Database=BasketDb;UserId=postgres;Password=1612003;Include Error Detail=true
+      - ConnectionStrings__Redis=distributedcache:6379
+    depends_on:
+      - basketdb
+      - distributedcache
+    ports:
+      - "6001:8080"
+      - "6061:8081"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro

@@ -2,15 +2,29 @@ version: '3.4'
 
 services:
   
-  songservicedb: 
+  catalogdb: 
     image: postgres
 
-  songservice.api:
-    image: ${DOCKER_REGISTRY-}songserviceapi
+  basketdb: 
+    image: postgres
+
+  distributedcache:
+    image: redis
+
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
     build:
       context: .
-      dockerfile: Services/SongService/SongService.Api/Dockerfile
+      dockerfile: Services/Catalog/Catalog.Api/Dockerfile
+
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: Services/Basket/Basket.Api/Dockerfile
 
 volumes:
-  postgres_songservice:
+  postgres_catalog:
+  postgres_basket:
+
 

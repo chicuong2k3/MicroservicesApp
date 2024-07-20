@@ -4,8 +4,11 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "catalog.api": "StartDebugging",
-        "songservice.api": "StartDebugging"
+        "catalog.api": "StartWithoutDebugging",
+        "basketdb": "StartWithoutDebugging",
+        "catalogdb": "StartWithoutDebugging",
+        "distributedcache": "StartWithoutDebugging",
+        "basket.api": "StartDebugging"
       }
     }
   }

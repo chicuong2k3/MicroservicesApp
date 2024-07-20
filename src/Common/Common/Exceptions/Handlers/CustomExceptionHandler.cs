@@ -12,45 +12,19 @@ namespace Common.Exceptions.Handlers
         {
             logger.LogError("Error message: {exceptionMessage}, Occurence Time: {time}", exception.Message, DateTime.Now);
 
-            (string Detail, string Title, int StatusCode) details = exception switch
+            int statusCode = exception switch
             {
-                InternalServerException =>
-                (
-                    exception.Message,
-                    exception.GetType().Name,
-                    StatusCodes.Status500InternalServerError
-                ),
-                ValidationException =>
-                (
-                    exception.Message,
-                    exception.GetType().Name,
-                    StatusCodes.Status400BadRequest
-                ),
-                NotFoundException =>
-                (
-                    exception.Message,
-                    exception.GetType().Name,
-                    StatusCodes.Status404NotFound
-                ),
-                BadRequestException =>
-                (
-                    exception.Message,
-                    exception.GetType().Name,
-                    StatusCodes.Status400BadRequest
-                ),
-                _ =>
-                (
-                    exception.Message,
-                    exception.GetType().Name,
-                    StatusCodes.Status500InternalServerError
-                )
+                ValidationException => StatusCodes.Status400BadRequest,
+                NotFoundException => StatusCodes.Status404NotFound,
+                BadRequestException => StatusCodes.Status400BadRequest,
+                _ => StatusCodes.Status500InternalServerError
             };
 
             var problemDetails = new ProblemDetails()
             {
-                Title = details.Title,
-                Status = details.StatusCode,
-                Detail = details.Detail,
+                Title = exception.GetType().Name,
+                Status = statusCode,
+                Detail = exception.Message,
                 Instance = httpContext.Request.Path
             };
 
