@@ -25,6 +25,14 @@
 
 **Libraries: Marten, StackExchangeRedis and Scrutor.**
 
+## Discout Service
+
+**Architecture: 3-Layer**
+
+**Databases: SQLite**
+
+**Libraries: Entity Framework Core, gRPC**
+
 ## References
 
 [A document schema for product variants and skus](https://www.elastic.co/blog/how-to-create-a-document-schema-for-product-variants-and-skus-for-your-ecommerce-search-experience)

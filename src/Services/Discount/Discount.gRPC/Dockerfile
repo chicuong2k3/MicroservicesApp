@@ -9,19 +9,17 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Services/Basket/Basket.Api/Basket.Api.csproj", "Services/Basket/Basket.Api/"]
-COPY ["Common/Common/Common.csproj", "Common/Common/"]
 COPY ["Services/Discount/Discount.gRPC/Discount.gRPC.csproj", "Services/Discount/Discount.gRPC/"]
-RUN dotnet restore "./Services/Basket/Basket.Api/Basket.Api.csproj"
+RUN dotnet restore "./Services/Discount/Discount.gRPC/Discount.gRPC.csproj"
 COPY . .
-WORKDIR "/src/Services/Basket/Basket.Api"
-RUN dotnet build "./Basket.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Services/Discount/Discount.gRPC"
+RUN dotnet build "./Discount.gRPC.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Basket.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Discount.gRPC.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Basket.Api.dll"]
+ENTRYPOINT ["dotnet", "Discount.gRPC.dll"]

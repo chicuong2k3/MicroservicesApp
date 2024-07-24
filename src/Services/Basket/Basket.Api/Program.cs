@@ -1,12 +1,15 @@
 
 using Common.Behaviours;
 using Common.Exceptions.Handlers;
+using Discount.gRPC.Protos;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Weasel.Core;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
+// Application Services
 var assembly = typeof(Program).Assembly;
 builder.Services.AddMediatR(config =>
 {
@@ -17,6 +20,9 @@ builder.Services.AddMediatR(config =>
 
 builder.Services.AddValidatorsFromAssembly(assembly);
 
+builder.Services.AddCarter();
+
+// Data Services
 var martenConnectionStr = builder.Configuration.GetConnectionString("Marten")!;
 
 builder.Services.AddMarten(options =>
@@ -30,8 +36,6 @@ builder.Services.AddMarten(options =>
 
 }).UseLightweightSessions();
 
-
-
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 
 var redisConnectionStr = builder.Configuration.GetConnectionString("Redis")!;
@@ -43,12 +47,29 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.Decorate<ICartRepository, CachedCartRepository>();
 
 
+// Grpc Services
+
+builder.Services.AddGrpcClient<DiscountProto.DiscountProtoClient>(options =>
+{
+    var url = builder.Configuration["GrpcSettings:DiscountUrl"]!;
+    options.Address = new Uri(url);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler()
+    {
+        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    };
+
+    return handler;
+});
+
+
+// Cross-cutting Services
 
 if (builder.Environment.IsDevelopment())
 {
 }
-
-builder.Services.AddCarter();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 

@@ -1,4 +1,5 @@
 ﻿
+using Discount.gRPC.Protos;
 
 namespace Basket.Api.Features.Carts.StoreCartItem;
 
@@ -41,12 +42,22 @@ public class CartItemValidator : AbstractValidator<CartItem>
     }
 }
 
-public class StoreCartItemCommandHandler(ICartRepository cartRepository)
+public class StoreCartItemCommandHandler(ICartRepository cartRepository, DiscountProto.DiscountProtoClient discountClient)
     : ICommandHandler<StoreCartItemCommand, StoreCartItemResult>
 {
     public async Task<StoreCartItemResult> Handle(StoreCartItemCommand command, CancellationToken cancellationToken)
     {
         var cart = command.Cart;
+
+        foreach (var item in command.Cart.CartItems)
+        {
+            var coupon = await discountClient.GetDiscountAsync(new GetDiscountRequest()
+            {
+                SkuId = item.SkuId
+            }, cancellationToken: cancellationToken);
+
+            item.Price -= (decimal)coupon.Percent / 100 * item.Price;    
+        }
 
         var cartResult = await cartRepository.StoreCartItemAsync(cart, cancellationToken);
         return new StoreCartItemResult()

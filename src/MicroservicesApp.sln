@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount.gRPC", "Services\Discount\Discount.gRPC\Discount.gRPC.csproj", "{7921DAC2-B440-463D-93C9-29AA72981BFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{78C29ADD-DC5F-4789-8550-896F35EF0A23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78C29ADD-DC5F-4789-8550-896F35EF0A23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78C29ADD-DC5F-4789-8550-896F35EF0A23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7921DAC2-B440-463D-93C9-29AA72981BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7921DAC2-B440-463D-93C9-29AA72981BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7921DAC2-B440-463D-93C9-29AA72981BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7921DAC2-B440-463D-93C9-29AA72981BFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{20CB8BE0-495F-4DDD-92B9-FE306777A3EF} = {24580140-4E74-47BA-A69A-98135C349009}
 		{06AAC943-1ECE-4EA3-9D61-A1D62C377F67} = {2D0B8608-9823-4B73-8ABB-BB2E97DA921B}
 		{78C29ADD-DC5F-4789-8550-896F35EF0A23} = {837D0274-1EBE-4329-9057-8C7BDF8C1164}
+		{7921DAC2-B440-463D-93C9-29AA72981BFC} = {F6BAE498-4089-4C01-BB34-65FF8958B5C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51E1CD70-9B1F-42E0-BBBC-832F06DA87F1}

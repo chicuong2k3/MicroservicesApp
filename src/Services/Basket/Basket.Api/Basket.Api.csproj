@@ -10,10 +10,19 @@
     <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;0436</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;0436</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.1" />
     <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="8.0.1" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.1" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
     <PackageReference Include="Marten" Version="7.21.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.7" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
@@ -25,6 +34,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Common\Common.csproj" />
+    <ProjectReference Include="..\..\Discount\Discount.gRPC\Discount.gRPC.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\..\Discount\Discount.gRPC\Protos\discount.proto" GrpcServices="Client">
+      <Link>Protos\discount.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>
