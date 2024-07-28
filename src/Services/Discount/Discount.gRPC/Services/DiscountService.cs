@@ -13,19 +13,22 @@ namespace Discount.gRPC.Services
         public override async Task<CouponModel> GetDiscount(GetDiscountRequest request, ServerCallContext context)
         {
             var coupon = await dbContext.Coupons
-                .FirstOrDefaultAsync(x => x.SkuId == request.SkuId);
+                .FirstOrDefaultAsync(x => x.ProductId.ToString().ToLower() == request.ProductId.ToLower());
 
             if (coupon == null)
             {
                 return new CouponModel
                 {
-                    SkuId = "No Discount",
+                    ProductId = "No Discount",
                     Description = "No Description",
-                    Percent = 0
+                    DiscountType = Protos.DiscountType.Unknown,
+                    Amount = 0,
+                    MinSpend = 0,
+                    MaxSpend = 0
                 };
             }
 
-            logger.LogInformation("Discount is retrieve for proudct with sku: {skuId}.", request.SkuId);
+            logger.LogInformation("Discount is retrieve for proudct: {productId}.", request.ProductId);
 
             return coupon.Adapt<CouponModel>();
         }
@@ -41,7 +44,7 @@ namespace Discount.gRPC.Services
             dbContext.Coupons.Add(coupon);
             await dbContext.SaveChangesAsync();
 
-            logger.LogInformation("Discount is created for product with sku: {skuId}.", coupon.SkuId);
+            logger.LogInformation("Discount is created for product: {productId}.", coupon.ProductId);
 
             return coupon.Adapt<CouponModel>();
         }
@@ -49,7 +52,7 @@ namespace Discount.gRPC.Services
         public override async Task<CouponModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
         {
             var coupon = await dbContext.Coupons
-                .FirstOrDefaultAsync(x => x.SkuId == request.SkuId);
+                .FirstOrDefaultAsync(x => x.ProductId.ToString().ToLower() == request.ProductId.ToLower());
 
             if (coupon == null)
             {
@@ -57,11 +60,16 @@ namespace Discount.gRPC.Services
             }
 
             coupon.Description = request.Description;
-            coupon.Percent = request.Percent;
+            coupon.DiscountType = (Models.DiscountType)request.DiscountType;    
+            coupon.Amount = request.Amount;
+            coupon.MinSpend = request.MinSpend;
+            coupon.MaxSpend = request.MaxSpend;
+            coupon.UsageLimit = request.UsageLimit;
+            coupon.UsageLimitPerUser = request.UsageLimitPerUser;
 
             await dbContext.SaveChangesAsync();
 
-            logger.LogInformation("Discount is updated for product with sku: {skuId}.", coupon.SkuId);
+            logger.LogInformation("Discount is updated for product: {productId}.", coupon.ProductId);
 
             return coupon.Adapt<CouponModel>();
         }
@@ -69,7 +77,7 @@ namespace Discount.gRPC.Services
         public override async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
         {
             var coupon = await dbContext.Coupons
-                .FirstOrDefaultAsync(x => x.SkuId == request.SkuId);
+                .FirstOrDefaultAsync(x => x.ProductId.ToString().ToLower() == request.ProductId.ToLower());
 
             if (coupon == null)
             {
@@ -79,7 +87,7 @@ namespace Discount.gRPC.Services
             dbContext.Coupons.Remove(coupon);
             await dbContext.SaveChangesAsync();
 
-            logger.LogInformation("Discount is deleted for product with sku: {skuId}.", coupon.SkuId);
+            logger.LogInformation("Discount is deleted for product: {productId}.", coupon.ProductId);
 
             return new DeleteDiscountResponse { Success = true };
         }

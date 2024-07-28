@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,7 +8,7 @@
 namespace Discount.gRPC.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class DiscountMigrate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +19,7 @@ namespace Discount.gRPC.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    SkuId = table.Column<string>(type: "TEXT", nullable: false),
+                    ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     Percent = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -29,12 +30,12 @@ namespace Discount.gRPC.Migrations
 
             migrationBuilder.InsertData(
                 table: "Coupons",
-                columns: new[] { "Id", "Description", "Percent", "SkuId" },
+                columns: new[] { "Id", "Description", "Percent", "ProductId" },
                 values: new object[,]
                 {
-                    { 1, "IPhone X 256GB", 15, "abc123" },
-                    { 2, "Laptop ASUS Travel Mate RAM 32GB", 20, "mnp456" },
-                    { 3, "Samsung Galaxy 256GB", 15, "xyz789" }
+                    { 1, "IPhone X 256GB", 15, new Guid("6267e3aa-3e20-4600-8cf8-ae908a55eb30") },
+                    { 2, "Laptop ASUS Travel Mate RAM 32GB", 20, new Guid("5853fe3d-677c-4bce-aa27-d12bf2b45e2e") },
+                    { 3, "Samsung Galaxy 256GB", 15, new Guid("6267e3aa-3e20-4600-8cf8-ae908a55eb30") }
                 });
         }
 

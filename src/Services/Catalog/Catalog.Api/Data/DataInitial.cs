@@ -27,57 +27,165 @@ namespace Catalog.Api.Data
             {
                 new Product()
                 {
-                    Id = random.Next(100),
-                    Name = "Nhập môn lập trình",
-                    Description = "Nhập môn lập trình"
+                    Id = new Guid("6267e3aa-3e20-4600-8cf8-ae908a55eb30"),
+                    Name = "Quần Kaki Nam Premium Ống Ôm Trơn Form Slim Cropped",
+                    Description = "Quần Kaki Nam Premium Ống Ôm Trơn Form Slim Cropped",
+                    Variants = new List<Variant>()
+                    {
+                        new Variant()
+                        {
+                            Id = 1,
+                            Sku = "QKNB28",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Black"},
+                                new VariantOption() { Name = "Size", Value = "28"}
+                            }
+                        },
+                        new Variant()
+                        {
+                            Id = 2,
+                            Sku = "QKNB29",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Black"},
+                                new VariantOption() { Name = "Size", Value = "29"}
+                            }
+                        },
+                        new Variant()
+                        {
+                            Id = 3,
+                            Sku = "QKNB30",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Black"},
+                                new VariantOption() { Name = "Size", Value = "30"}
+                            }
+                        },
+                        new Variant()
+                        {
+                            Id = 4,
+                            Sku = "QKNT28",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Tofu"},
+                                new VariantOption() { Name = "Size", Value = "28"}
+                            }
+                        },
+                        new Variant()
+                        {
+                            Id = 5,
+                            Sku = "QKNT29",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Tofu"},
+                                new VariantOption() { Name = "Size", Value = "29"}
+                            }
+                        },
+                        new Variant()
+                        {
+                            Id = 6,
+                            Sku = "QKNT30",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Tofu"},
+                                new VariantOption() { Name = "Size", Value = "30"}
+                            }
+                        }
+                    }
                 },
                 new Product()
                 {
-                    Id = random.Next(100),
-                    Name = "Kỹ thuật lập trình",
-                    Description = "Kỹ thuật lập trình"
-                },
-                new Product()
-                {
-                    Id = random.Next(100),
-                    Name = "Giải tích 1",
-                    Description = "Giải tích 1"
-                },
-                new Product()
-                {
-                    Id = random.Next(100),
-                    Name = "Giải tích 2",
-                    Description = "Giải tích 2"
-                },
-                new Product()
-                {
-                    Id = random.Next(100),
-                    Name = "Vật lý đại cương 1",
-                    Description = "Vật lý đại cương 1"
-                },
-                new Product()
-                {
-                    Id = random.Next(100),
-                    Name = "Vật lý đại cương 2",
-                    Description = "Vật lý đại cương 2"
-                },
-                new Product()
-                {
-                    Id = random.Next(100),
-                    Name = "Triết học",
-                    Description = "Triết học"
-                },
-                new Product()
-                {
-                    Id = random.Next(100),
-                    Name = "Chủ nghĩa xã hội khoa học",
-                    Description = "Chủ nghĩa xã hội khoa học"
-                },
-                new Product()
-                {
-                    Id = random.Next(100),
-                    Name = "Tư tưởng Hồ Chí Minh",
-                    Description = "Tư tưởng Hồ Chí Minh"
+                    Id = new Guid("5853fe3d-677c-4bce-aa27-d12bf2b45e2e"),
+                    Name = "Quần Cargo Nam Túi Hộp Ống Rộng Trơn Form Wide Leg",
+                    Description = "Quần Cargo Nam Túi Hộp Ống Rộng Trơn Form Wide Leg",
+                    Variants = new List<Variant>()
+                    {
+                        new Variant()
+                        {
+                            Id = 1,
+                            Sku = "QKNBT28",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Black"},
+                                new VariantOption() { Name = "Size", Value = "28"}
+                            }
+                        },
+                        new Variant()
+                        {
+                            Id = 2,
+                            Sku = "QKNBT29",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Black"},
+                                new VariantOption() { Name = "Size", Value = "29"}
+                            }
+                        },
+                        new Variant()
+                        {
+                            Id = 3,
+                            Sku = "QKNBT30",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Black"},
+                                new VariantOption() { Name = "Size", Value = "30"}
+                            }
+                        },
+                        new Variant()
+                        {
+                            Id = 4,
+                            Sku = "QKNTT28",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Tofu"},
+                                new VariantOption() { Name = "Size", Value = "28"}
+                            }
+                        },
+                        new Variant()
+                        {
+                            Id = 5,
+                            Sku = "QKNTT29",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Tofu"},
+                                new VariantOption() { Name = "Size", Value = "29"}
+                            }
+                        },
+                        new Variant()
+                        {
+                            Id = 6,
+                            Sku = "QKNTT30",
+                            StockQuantity = random.Next(10),
+                            Price = 638000,
+                            Options = new List<VariantOption>()
+                            {
+                                new VariantOption() { Name = "Color", Value = "Tofu"},
+                                new VariantOption() { Name = "Size", Value = "30"}
+                            }
+                        }
+                    }
                 }
             };
         }

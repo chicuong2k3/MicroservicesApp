@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Discount.gRPC.Extensions
 {
-    public static class Extensions
+    public static class InitialData
     {
         public static IApplicationBuilder UseMigration(this IApplicationBuilder app)
         {
@@ -12,6 +12,7 @@ namespace Discount.gRPC.Extensions
                 using (var context = scope.ServiceProvider.GetRequiredService<DiscountContext>())
                 {
                     context.Database.MigrateAsync();
+                    
                     return app;
                 }
             }

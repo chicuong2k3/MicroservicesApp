@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+//import "google/protobuf/timestamp.proto";
+
 option csharp_namespace = "Discount.gRPC.Protos";
 
 package discount;
@@ -11,31 +13,57 @@ service DiscountProto {
 	rpc DeleteDiscount (DeleteDiscountRequest) returns (DeleteDiscountResponse);
 }
 
+enum DiscountType {
+	Unknown = 0;
+    Percentage = 1;
+    FixedProduct = 2;
+}
+
 message GetDiscountRequest {
-	string skuId = 1;
+	string productId = 1;
 }
 
 message CreateDiscountRequest {
-	string skuId = 1;
-	string description = 2;
-	int32 percent = 3;
+	string code = 1;
+	string productId = 2;
+	string description = 3;
+	DiscountType discountType = 4;
+	double amount = 5;
+	double minSpend = 6;
+	double maxSpend = 7;
+	int32 usageLimit = 8;
+	int32 usageLimitPerUser = 9;
+	//google.protobuf.Timestamp dateExpire = 10; 
 }
 
 message UpdateDiscountRequest {
-	string skuId = 1;
+	string productId = 1;
 	string description = 2;
-	int32 percent = 3;
+	DiscountType discountType = 3;
+	double amount = 4;
+	double minSpend = 5;
+	double maxSpend = 6;
+	int32 usageLimit = 7;
+	int32 usageLimitPerUser = 8;
+	//google.protobuf.Timestamp dateExpire = 9; 
 }
 
 message DeleteDiscountRequest {
-	string skuId = 1;
+	string productId = 1;
 }
 
 message CouponModel {
 	int32 id = 1;
-	string skuId = 2;
-	string description = 3;
-	int32 percent = 4;
+	string code = 2;
+	string productId = 3;
+	string description = 4;
+	DiscountType discountType = 5;
+	double amount = 6;
+	double minSpend = 7;
+	double maxSpend = 8;
+	int32 usageLimit = 9;
+	int32 usageLimitPerUser = 10;
+	//google.protobuf.Timestamp dateExpire = 11; 
 }
 
 message DeleteDiscountResponse {

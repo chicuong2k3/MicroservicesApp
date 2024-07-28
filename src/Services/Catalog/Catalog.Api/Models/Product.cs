@@ -2,9 +2,9 @@
 {
     public class Product
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = default!;
         public string? Description { get; set; }
-        public List<Sku> Skus { get; set; } = new();
+        public List<Variant> Variants { get; set; } = new();
     }
 }

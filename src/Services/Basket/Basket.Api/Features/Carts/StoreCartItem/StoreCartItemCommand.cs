@@ -31,8 +31,11 @@ public class CartItemValidator : AbstractValidator<CartItem>
 {
     public CartItemValidator()
     {
-        RuleFor(x => x.SkuId)
-            .NotEmpty().WithMessage("SkuId is required.");
+        RuleFor(x => x.ProductId)
+            .NotNull().WithMessage("ProductId is required.");
+
+        RuleFor(x => x.VariantId)
+            .NotNull().WithMessage("VariantId is required.");
 
         RuleFor(x => x.Quantity)
             .GreaterThanOrEqualTo(0).WithMessage("Quantity must be greater than or equal to 0.");
@@ -53,10 +56,17 @@ public class StoreCartItemCommandHandler(ICartRepository cartRepository, Discoun
         {
             var coupon = await discountClient.GetDiscountAsync(new GetDiscountRequest()
             {
-                SkuId = item.SkuId
+                ProductId = item.ProductId.ToString()
             }, cancellationToken: cancellationToken);
 
-            item.Price -= (decimal)coupon.Percent / 100 * item.Price;    
+            if (coupon.DiscountType == DiscountType.Percentage)
+            {
+                item.Price -= (double)coupon.Amount / 100 * item.Price;
+            }    
+            else if (coupon.DiscountType == DiscountType.FixedProduct)
+            {
+                item.Price -= coupon.Amount;
+            }
         }
 
         var cartResult = await cartRepository.StoreCartItemAsync(cart, cancellationToken);

@@ -2,7 +2,7 @@
 namespace Catalog.Api.Features.Products.Delete;
 public class DeleteProductCommand : ICommand
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 }
 
 public class DeleteProductCommandValidator : AbstractValidator<DeleteProductCommand>

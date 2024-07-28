@@ -8,7 +8,7 @@ public class GetProductByIdResult
 }
 public class GetProductByIdQuery : IQuery<GetProductByIdResult>
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 }
 
 internal class GetProductByIdQueryHandler(IDocumentSession session)

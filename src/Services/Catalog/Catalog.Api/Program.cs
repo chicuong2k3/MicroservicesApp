@@ -4,14 +4,15 @@ using Common.Behaviours;
 using Common.Exceptions.Handlers;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using System.Reflection;
 using Weasel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var assembly = typeof(Program).Assembly;
+var assembly = Assembly.GetExecutingAssembly();
 builder.Services.AddMediatR(config =>
 {
-    config.RegisterServicesFromAssemblies(assembly);
+    config.RegisterServicesFromAssembly(assembly);
     config.AddOpenBehavior(typeof(ValidationBehaviour<,>));
     config.AddOpenBehavior(typeof(LoggingBehaviour<,>));
 });

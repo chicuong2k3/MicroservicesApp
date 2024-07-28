@@ -1,6 +1,6 @@
-# E-commerce Application using Microservices Architecture
+# E-commerce Application with Microservices Architecture
 
-## Common libraries used in all Microservices
+## Libraries used
 - MediatR for CQRS pattern (a library that implements Mediator pattern).
 - Mapster for Object Mapping.
 - Carter for API Endpoints.
@@ -9,7 +9,9 @@
 
 ## Catalog Service
 
-**Architectures: Vertical Slice, CQRS.**
+**Architecture: Vertical Slice Architecture.**
+
+**Patterns: CQRS.**
 
 **Databases: PostgreSQL as a Document DB.**
 
@@ -17,9 +19,9 @@
 
 ## Basket Service
 
-**Architectures: Vertical Slice, CQRS.**
+**Architecture: Vertical Slice Architecture.**
 
-**Patterns: Repository, Cache-Aside, Proxy and Decorator.**
+**Patterns: CQRS, Repository, Cache-Aside, Proxy and Decorator.**
 
 **Databases: PostgreSQL as a Document DB and Redis.**
 
@@ -27,11 +29,23 @@
 
 ## Discout Service
 
-**Architecture: 3-Layer**
+**Architecture: 3-Layer Architecture**
 
 **Databases: SQLite**
 
 **Libraries: Entity Framework Core, gRPC**
+
+## Ordering Service
+
+**Architecture: Clean Architecture.**
+
+**Development Approach: Domain-Driven Design**
+
+**Patterns: CQRS, Repository, Event Sourcing, REPR**
+
+**Databases: MSSQL Server**
+
+**Libraries: Entity Framework Core, MassTransit**
 
 ## References
 
@@ -39,3 +53,6 @@
 
 [Modelling Products and Variants for E-Commerce](https://martinbean.dev/blog/2023/01/27/product-variants-laravel/)
 
+[AMQP](https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol)
+
+[Protocol Buffers Documentation](https://protobuf.dev/overview)

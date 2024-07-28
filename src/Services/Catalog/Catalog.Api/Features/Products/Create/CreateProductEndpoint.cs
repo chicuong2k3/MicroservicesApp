@@ -4,13 +4,11 @@ namespace Catalog.Api.Features.Products.Create;
 
 public class CreateProductRequest
 {
-    public string Name { get; set; } = default!;
-    public string Description { get; set; } = default!;
-    //public string FileUrl { get; set; } = default!;
+    public Product Product { get; set; } = default!;
 }
 public class CreateProductResponse
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 }
 public class CreateProductEndpoint : ICarterModule
 {
