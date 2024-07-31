@@ -6,6 +6,7 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Reflection;
 using Weasel.Core;
+using Common.Messaging.MassTransit;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,6 +67,11 @@ builder.Services.AddGrpcClient<DiscountProto.DiscountProtoClient>(options =>
 });
 
 
+// Message Broker
+
+builder.Services.AddMessageBroker(builder.Configuration);
+
+
 // Cross-cutting Services
 
 if (builder.Environment.IsDevelopment())
@@ -75,10 +81,13 @@ if (builder.Environment.IsDevelopment())
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 
+// Health Checks
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(martenConnectionStr)
     .AddRedis(redisConnectionStr);
+
+
 
 var app = builder.Build();
 

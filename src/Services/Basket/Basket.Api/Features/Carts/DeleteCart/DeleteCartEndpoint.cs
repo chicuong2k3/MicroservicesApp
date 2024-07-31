@@ -14,7 +14,7 @@ public class DeleteCartEndpoint : ICarterModule
             return Results.NoContent();
         })
         .WithName("DeleteCart")
-        .Produces<Cart>(StatusCodes.Status204NoContent)
+        .Produces(StatusCodes.Status204NoContent)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Delete cart.");
     }

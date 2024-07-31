@@ -6,7 +6,6 @@ using Ordering.Application.Features.Orders.Queries;
 
 namespace Ordering.Api.Endpoints;
 
-public record GetOrdersByCustomerResponse(IEnumerable<OrderDto> Orders);
 public class GetOrdersByCustomerEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
@@ -14,12 +13,11 @@ public class GetOrdersByCustomerEndpoint : ICarterModule
         app.MapGet("/api/orders/customer/{customerId}", async (Guid customerId, ISender sender) =>
         {
             var command = new GetOrdersByCustomerQuery() { CustomerId = customerId };
-            var result = await sender.Send(command);
-            var response = result.Adapt<GetOrdersByCustomerResponse>();
+            var response = await sender.Send(command);
             return Results.Ok(response);
         })
         .WithName("GetOrdersByCustomer")
-        .Produces<GetOrdersByCustomerResponse>(StatusCodes.Status200OK)
+        .Produces<GetOrdersByCustomerResult>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .ProducesProblem(StatusCodes.Status404NotFound)
         .WithSummary("Get orders of a customer.");

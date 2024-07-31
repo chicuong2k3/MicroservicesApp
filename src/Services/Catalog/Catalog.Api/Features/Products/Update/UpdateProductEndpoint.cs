@@ -1,21 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.Api.Features.Products.Update;
-
-public class UpdateProductRequest
-{
-    public Product Product { get; set; } = default!;
-}
 public class UpdateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPut("api/products/{id}", async (Guid id, [FromBody] UpdateProductRequest request, ISender sender) =>
+        app.MapPut("api/products/{id}", async (Guid id, [FromBody] UpdateProductCommand request, ISender sender) =>
         {
-            var command = request.Adapt<UpdateProductCommand>();
-            command.Product.Id = id;
-            await sender.Send(command);
-            return Results.Ok("Product updated.");
+            request.Product.Id = id;
+            await sender.Send(request);
+            return Results.Ok();
         })
         .WithName("UpdateProduct")
         .Produces(StatusCodes.Status200OK)

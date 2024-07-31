@@ -9,7 +9,7 @@ public class CreateOrderResult
 
 
 public record CreateOrderCommand(
-    Guid CustomerId,
+    string UserName,
     string OrderName,
     CreateAddressDto ShippingAddress,
     CreatePaymentDto Payment,
@@ -19,7 +19,7 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
 {
     public CreateOrderCommandValidator()
     {
-        RuleFor(x => x.CustomerId).NotEmpty().WithMessage("CustomerId is required.");
+        RuleFor(x => x.UserName).NotEmpty().WithMessage("UserName is required.");
         RuleFor(x => x.OrderName).NotEmpty().WithMessage("OrderName is required.");
         RuleFor(x => x.OrderItems).NotEmpty().WithMessage("OrderItems cannot be empty.");
     }
@@ -30,7 +30,7 @@ public class CreateOrderCommandHandler(IAppDbContext dbContext) :
     public async Task<CreateOrderResult> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
     {
 
-        var order = CreateOrder(command);
+        var order = await CreateOrder(command);
 
         dbContext.Orders.Add(order);
         await dbContext.SaveChangesAsync(cancellationToken);
@@ -41,7 +41,7 @@ public class CreateOrderCommandHandler(IAppDbContext dbContext) :
         };
     }
 
-    private Order CreateOrder(CreateOrderCommand command)
+    private async Task<Order> CreateOrder(CreateOrderCommand command)
     {
         var shippingAddress = Address.Generate(
             command.ShippingAddress.City,
@@ -53,9 +53,13 @@ public class CreateOrderCommandHandler(IAppDbContext dbContext) :
             command.Payment.Title,
             command.Payment.PaymentMethod);
 
+        var customer = await dbContext.Customers
+                .SingleOrDefaultAsync(x => x.UserName.Equals(command.UserName));
+        var customerId = customer != null ? customer.Id.Value : Guid.NewGuid();
+
         var order = Order.Create(
             OrderId.Generate(Guid.NewGuid()),
-            CustomerId.Generate(command.CustomerId),
+            CustomerId.Generate(customerId),
             OrderName.Generate(command.OrderName),
             shippingAddress,
             payment);

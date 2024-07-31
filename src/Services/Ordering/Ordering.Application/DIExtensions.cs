@@ -1,14 +1,17 @@
 ﻿using Common.Behaviours;
-using Common.Exceptions.Handlers;
-using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Common.Messaging.MassTransit;
+using Microsoft.Extensions.Configuration;
+using Microsoft.FeatureManagement;
 
 namespace Ordering.Application;
 
 public static class DIExtensions
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         var assembly = Assembly.GetExecutingAssembly();
         services.AddMediatR(config =>
@@ -20,6 +23,11 @@ public static class DIExtensions
 
         services.AddValidatorsFromAssembly(assembly);
 
+        // Feature Management
+        services.AddFeatureManagement();
+
+        // Message Broker
+        services.AddMessageBroker(configuration, Assembly.GetExecutingAssembly());
 
         return services;
     }

@@ -7,12 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Common.Messaging\Common.Messaging.csproj" />
     <ProjectReference Include="..\..\..\Common\Common\Common.csproj" />
     <ProjectReference Include="..\Ordering.Domain\Ordering.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Orders\EventHandlers\IntegrationEvents\" />
   </ItemGroup>
 
   <ItemGroup>
