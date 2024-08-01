@@ -12,7 +12,7 @@ public class CreateProductEndpoint : ICarterModule
             return Results.Created($"api/products/{response.Id}", response);
         })
         .WithName("CreateProduct")
-        .Produces<CreateProductResult>(StatusCodes.Status201Created)
+        .Produces<Product>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Create new product.");
     }

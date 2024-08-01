@@ -33,7 +33,7 @@ builder.Services.AddMarten(options =>
     options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
     options.UseSystemTextJsonForSerialization();
 
-    options.Schema.For<Cart>().Identity(x => x.UserName);
+    options.Schema.For<Cart>().Identity(x => x.UserId);
 
 
 }).UseLightweightSessions();

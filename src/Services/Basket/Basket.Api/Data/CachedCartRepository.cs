@@ -7,16 +7,16 @@ namespace Basket.Api.Data
     public class CachedCartRepository(ICartRepository cartRepository, IDistributedCache cache) 
         : ICartRepository
     {
-        public async Task DeleteCartAsync(string userName, CancellationToken cancellationToken = default)
+        public async Task DeleteCartAsync(Guid userId, CancellationToken cancellationToken = default)
         {
-            await cartRepository.DeleteCartAsync(userName, cancellationToken);
+            await cartRepository.DeleteCartAsync(userId, cancellationToken);
 
-            await cache.RemoveAsync(userName, cancellationToken);
+            await cache.RemoveAsync(userId.ToString(), cancellationToken);
         }
 
-        public async Task<Cart> GetCartAsync(string userName, CancellationToken cancellationToken = default)
+        public async Task<Cart> GetCartAsync(Guid userId, CancellationToken cancellationToken = default)
         {
-            var cachedCartJson = await cache.GetStringAsync(userName, cancellationToken);
+            var cachedCartJson = await cache.GetStringAsync(userId.ToString(), cancellationToken);
 
             if (!string.IsNullOrEmpty(cachedCartJson))
             {
@@ -27,15 +27,15 @@ namespace Basket.Api.Data
                 }
             }
 
-            var cart = await cartRepository.GetCartAsync(userName, cancellationToken);
-            await cache.SetStringAsync(userName, JsonSerializer.Serialize(cart), cancellationToken);
+            var cart = await cartRepository.GetCartAsync(userId, cancellationToken);
+            await cache.SetStringAsync(userId.ToString(), JsonSerializer.Serialize(cart), cancellationToken);
             return cart;
         }
 
         public async Task<Cart> StoreCartItemAsync(Cart cart, CancellationToken cancellationToken = default)
         {
             await cartRepository.StoreCartItemAsync(cart, cancellationToken);
-            await cache.SetStringAsync(cart.UserName, JsonSerializer.Serialize(cart), cancellationToken);
+            await cache.SetStringAsync(cart.UserId.ToString(), JsonSerializer.Serialize(cart), cancellationToken);
             return cart;
         }
     }

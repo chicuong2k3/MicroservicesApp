@@ -8,7 +8,7 @@ namespace Basket.Api.Features.CheckoutCart;
 public class CheckoutCartCommand : ICommand
 {
     // Customer's Info
-    public string UserName { get; set; } = default!;
+    public Guid UserId { get; set; }
 
     public string FirstName { get; set; } = default!;
     public string LastName { get; set; } = default!;
@@ -28,8 +28,8 @@ public class CheckoutCartCommandValidator : AbstractValidator<CheckoutCartComman
 {
     public CheckoutCartCommandValidator()
     {
-        RuleFor(x => x.UserName)
-            .NotEmpty().WithMessage("UserName is required.");
+        RuleFor(x => x.UserId)
+            .NotNull().WithMessage("UserId is required.");
     }
 }
 public class CheckoutCartCommandHandler(ICartRepository cartRepository, IPublishEndpoint publishEndpoint) 
@@ -37,7 +37,7 @@ public class CheckoutCartCommandHandler(ICartRepository cartRepository, IPublish
 {
     public async Task<Unit> Handle(CheckoutCartCommand command, CancellationToken cancellationToken)
     {
-        var cart = await cartRepository.GetCartAsync(command.UserName, cancellationToken);
+        var cart = await cartRepository.GetCartAsync(command.UserId, cancellationToken);
 
         var eventMessage = command.Adapt<CartCheckoutEvent>();
         eventMessage.CartItems = cart.CartItems.Adapt<List<Common.Messaging.IntegrationEvents.CartItem>>();
@@ -45,7 +45,7 @@ public class CheckoutCartCommandHandler(ICartRepository cartRepository, IPublish
 
         await publishEndpoint.Publish(eventMessage, cancellationToken);
 
-        await cartRepository.DeleteCartAsync(command.UserName, cancellationToken);
+        await cartRepository.DeleteCartAsync(command.UserId, cancellationToken);
 
         return new Unit();
     }

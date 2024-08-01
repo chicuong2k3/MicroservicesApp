@@ -5,24 +5,23 @@ namespace Basket.Api.Features.Carts.StoreCartItem;
 
 public class StoreCartItemResult
 {
-    public string UserName { get; set; } = default!;
+    public Guid UserId { get; set; } 
 }
 public class StoreCartItemCommand : ICommand<StoreCartItemResult>
 {
-    public Cart Cart { get; set; } = default!;
+    public Guid UserId { get; set; }
+    public List<CartItem> CartItems { get; set; } = new();
 }
 
 public class StoreCartItemCommandValidator : AbstractValidator<StoreCartItemCommand>
 {
     public StoreCartItemCommandValidator()
     {
-        RuleFor(x => x.Cart)
-            .NotNull().WithMessage("Cart is required.");
 
-        RuleFor(x => x.Cart.UserName)
-                    .NotEmpty().WithMessage("UserName is required.");
+        RuleFor(x => x.UserId)
+                    .NotEmpty().WithMessage("UserId is required.");
 
-        RuleForEach(x => x.Cart.CartItems)
+        RuleForEach(x => x.CartItems)
             .SetValidator(new CartItemValidator());
     }
 }
@@ -50,9 +49,8 @@ public class StoreCartItemCommandHandler(ICartRepository cartRepository, Discoun
 {
     public async Task<StoreCartItemResult> Handle(StoreCartItemCommand command, CancellationToken cancellationToken)
     {
-        var cart = command.Cart;
-
-        foreach (var item in command.Cart.CartItems)
+        
+        foreach (var item in command.CartItems)
         {
             var coupon = await discountClient.GetDiscountAsync(new GetDiscountRequest()
             {
@@ -69,10 +67,12 @@ public class StoreCartItemCommandHandler(ICartRepository cartRepository, Discoun
             }
         }
 
+        var cart = command.Adapt<Cart>();
+
         var cartResult = await cartRepository.StoreCartItemAsync(cart, cancellationToken);
         return new StoreCartItemResult()
         {
-            UserName = cartResult.UserName
+            UserId = cartResult.UserId
         };
     }
 }

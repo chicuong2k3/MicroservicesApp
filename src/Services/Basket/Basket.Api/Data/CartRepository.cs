@@ -4,19 +4,19 @@ namespace Basket.Api.Data
 {
     public class CartRepository(IDocumentSession session) : ICartRepository
     {
-        public async Task DeleteCartAsync(string userName, CancellationToken cancellationToken = default)
+        public async Task DeleteCartAsync(Guid userId, CancellationToken cancellationToken = default)
         {
-            session.Delete<Cart>(userName);
+            session.Delete<Cart>(userId);
             await session.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<Cart> GetCartAsync(string userName, CancellationToken cancellationToken = default)
+        public async Task<Cart> GetCartAsync(Guid userId, CancellationToken cancellationToken = default)
         {
-            var cart = await session.LoadAsync<Cart>(userName, cancellationToken);
+            var cart = await session.LoadAsync<Cart>(userId, cancellationToken);
 
             if (cart == null)
             {
-                throw new CartNotFoundException(userName);
+                throw new CartNotFoundException(userId);
             }
 
             return cart;

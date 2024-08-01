@@ -1,44 +1,49 @@
 ﻿
 namespace Catalog.Api.Features.Products.Update;
 
-public class UpdateProductCommand : ICommand
+public class UpdateProductCommand : ICommand<Product>
 {
-    public Product Product { get; set; } = default!;
+    public Guid Id { get; set; }
+    public string Name { get; set; } = default!;
+    public string? Description { get; set; }
+    public string? Slug { get; set; }
+    public int CategoryId { get; set; }
+    public List<Variant> Variants { get; set; } = new();
 }
 public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
 {
     public UpdateProductCommandValidator()
     {
-        RuleFor(x => x.Product.Id).NotNull().WithMessage("Id is required.");
+        RuleFor(x => x.Id).NotNull().WithMessage("Id is required.");
 
-        RuleFor(x => x.Product.Name).NotEmpty().WithMessage("Name is required.")
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required.")
             .Length(5, 100).WithMessage("Name must have between 5 and 100 characters.");
 
-        RuleFor(x => x.Product.Description).NotEmpty().WithMessage("Description is required.")
+        RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required.")
             .Length(10, 500).WithMessage("Description must have between 10 and 500 characters..");
 
 
     }
 }
 internal class UpdateProductCommandHandler(IDocumentSession session)
-    : ICommandHandler<UpdateProductCommand>
+    : ICommandHandler<UpdateProductCommand, Product>
 {
-    public async Task<Unit> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
+    public async Task<Product> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        var product = await session.LoadAsync<Product>(command.Product.Id);
+        var product = await session.LoadAsync<Product>(command.Id);
 
         if (product == null)
         {
-            throw new ProductNotFoundException(command.Product.Id);
+            throw new ProductNotFoundException(command.Id);
         }
 
-        product.Name = command.Product.Name;
-        product.Description = command.Product.Description;
-        product.Variants = command.Product.Variants;
+        product.Name = command.Name;
+        product.Description = command.Description;
+        product.Variants = command.Variants;
 
         session.Update(product);
         await session.SaveChangesAsync(cancellationToken);
 
-        return new Unit();
+        return product;
     }
 }

@@ -18,9 +18,9 @@
 
 **Patterns: CQRS.**
 
-**Databases: PostgreSQL as a Document DB, MongoDB.**
+**Databases: PostgreSQL as a Document DB.**
 
-**Libraries: Marten, MongoDB.EntityFrameworkCore.**
+**Libraries: Marten.**
 
 ## Basket Service
 

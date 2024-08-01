@@ -1,7 +1,7 @@
 ﻿
 namespace Catalog.Api.Features.Products.Delete;
 
-public class DeleteProductEndpoint : ICarterModule
+public class DeleteCategoryEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {

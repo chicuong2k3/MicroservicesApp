@@ -1,26 +1,18 @@
 ﻿
 namespace Basket.Api.Features.Carts.GetCart;
 
-public class GetCartResult
+public class GetCartQuery : IQuery<Cart>
 {
-    public Cart Cart { get; set; } = new();
-}
-
-public class GetCartQuery : IQuery<GetCartResult>
-{
-    public string UserName { get; set; } = default!;
+    public Guid UserId { get; set; }
 }
 
 internal class GetCartQueryHandler(ICartRepository cartRepository)
-    : IQueryHandler<GetCartQuery, GetCartResult>
+    : IQueryHandler<GetCartQuery, Cart>
 {
-    public async Task<GetCartResult> Handle(GetCartQuery query, CancellationToken cancellationToken)
+    public async Task<Cart> Handle(GetCartQuery query, CancellationToken cancellationToken)
     {
-        var cart = await cartRepository.GetCartAsync(query.UserName);
+        var cart = await cartRepository.GetCartAsync(query.UserId);
 
-        return new GetCartResult()
-        {
-            Cart = cart
-        };
+        return cart;
     }
 }

@@ -2,7 +2,7 @@
 {
     public class Cart
     {
-        public string UserName { get; set; } = default!;
+        public Guid UserId { get; set; }
         public List<CartItem> CartItems { get; set; } = new();
         public double TotalPrice { get => CartItems.Sum(x => x.Price * x.Quantity); }
     }
