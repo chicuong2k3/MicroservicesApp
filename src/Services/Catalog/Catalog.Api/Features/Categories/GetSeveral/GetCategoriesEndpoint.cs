@@ -11,7 +11,7 @@ public class GetCategoriesEndpoint : ICarterModule
             return Results.Ok(response);
         })
         .WithName("GetCategories")
-        .Produces<GetCategoriesResult>(StatusCodes.Status200OK)
+        .Produces<IEnumerable<Category>>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Get several categories.");
     }

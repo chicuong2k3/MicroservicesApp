@@ -1,8 +1,6 @@
 ﻿global using Carter;
 global using Mapster;
 global using MediatR;
-global using Marten;
-global using Marten.Pagination;
 global using Catalog.Api.Models;
 global using Common.CQRS;
 global using Catalog.Api.Exceptions;

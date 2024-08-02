@@ -1,4 +1,6 @@
 ﻿
+using Catalog.Api.Data;
+
 namespace Catalog.Api.Features.Categories.Delete;
 public class DeleteCategoryCommand : ICommand
 {
@@ -12,14 +14,21 @@ public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCo
         RuleFor(x => x.Id).NotNull().WithMessage("Id is required.");
     }
 }
-internal class DeleteCategoryCommandHandler(IDocumentSession session)
+internal class DeleteCategoryCommandHandler(AppDbContext dbContext)
     : ICommandHandler<DeleteCategoryCommand>
 {
     public async Task<Unit> Handle(DeleteCategoryCommand command, CancellationToken cancellationToken)
     {
 
-        session.Delete<Category>(command.Id);
-        await session.SaveChangesAsync();
+        var category = await dbContext.Categories.FindAsync(command.Id);
+
+        if (category == null)
+        {
+            throw new CategoryNotFoundException(command.Id);
+        }
+
+        dbContext.Categories.Remove(category);
+        await dbContext.SaveChangesAsync();
 
         return new Unit();
     }

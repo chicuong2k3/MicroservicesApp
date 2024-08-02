@@ -46,7 +46,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YarpApiGateway", "ApiGatewa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Authentication", "Authentication", "{E9E770E1-369B-48AF-8CF5-6444EAA28324}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authentication.Api", "Services\Authentication\Authentication.Api\Authentication.Api.csproj", "{2C925268-7564-4DE2-ACBF-61316B1A2E8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authentication.Api", "Services\Authentication\Authentication.Api\Authentication.Api.csproj", "{2C925268-7564-4DE2-ACBF-61316B1A2E8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

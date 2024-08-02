@@ -1,11 +1,12 @@
 
 using Catalog.Api.Data;
+using Catalog.Api.Extensions;
 using Common.Behaviours;
 using Common.Exceptions.Handlers;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using Weasel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,28 +20,19 @@ builder.Services.AddMediatR(config =>
 
 builder.Services.AddValidatorsFromAssembly(assembly);
 
-var martenConnectionStr = builder.Configuration.GetConnectionString("Marten")!;
+var connectionStr = builder.Configuration.GetConnectionString("SqlServer")!;
 
-builder.Services.AddMarten(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.Connection(martenConnectionStr);
-    options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
-    options.UseSystemTextJsonForSerialization();
-    
-
-}).UseLightweightSessions();
-
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.InitializeMartenWith<DataInitial>();
-}
+    options.UseSqlServer(connectionStr);
+});
 
 builder.Services.AddCarter();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 builder.Services.AddHealthChecks()
-    .AddNpgSql(martenConnectionStr);
+    .AddSqlServer(connectionStr);
 
 var app = builder.Build();
 
@@ -53,6 +45,11 @@ app.UseHealthChecks("/api/health", new HealthCheckOptions()
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
+if (builder.Environment.IsDevelopment())
+{
+    app.InitializeDatabase();
+}
 
 //app.UseExceptionHandler(exceptionHandler =>
 //{

@@ -1,28 +1,35 @@
 ﻿
+using Catalog.Api.Data;
+using Catalog.Api.Data.Dtos;
+using Catalog.Api.Extensions;
+using Common.Pagination;
+using Microsoft.EntityFrameworkCore;
+
 namespace Catalog.Api.Features.Products.GetSeveral;
 
-public class GetProductsResult
+public class GetProductsQuery() : PaginationRequest, IQuery<PaginatedResult<ProductDto>>
 {
-    public IEnumerable<Product> Products { get; set; } = new List<Product>();
-}
-public class GetProductsQuery : IQuery<GetProductsResult>
-{
-    public int? PageNumber { get; set; }
-    public int? PageSize { get; set; }
+
 }
 
-internal class GetProductsQueryHandler(IDocumentSession session)
-    : IQueryHandler<GetProductsQuery, GetProductsResult>
+internal class GetProductsQueryHandler(AppDbContext dbContext)
+    : IQueryHandler<GetProductsQuery, PaginatedResult<ProductDto>>
 {
-    public async Task<GetProductsResult> Handle(GetProductsQuery query, CancellationToken cancellationToken)
+    public async Task<PaginatedResult<ProductDto>> Handle(GetProductsQuery query, CancellationToken cancellationToken)
     {
-        IQueryable<Product> products = session.Query<Product>();
+        var products = dbContext.Products;
 
 
-        return new GetProductsResult()
-        {
-            Products = await products.ToPagedListAsync(query?.PageNumber ?? 1, query?.PageSize ?? 10, cancellationToken)
-        };
+        return new PaginatedResult<ProductDto>(
+            query.PageNumber,
+            query.PageSize,
+            products.Count(),
+            await products.Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize)
+                    .Include(x => x.Variants)
+                    .ThenInclude(x => x.VariantOptions)
+                    .ThenInclude(x => x.ProductAttribute)
+                    .Select(x => x.ToProductDto()).ToListAsync()
+        );
 
 
     }

@@ -1,5 +1,7 @@
 ﻿
 
+using Catalog.Api.Data.Dtos;
+
 namespace Catalog.Api.Features.Products.GetById;
 
 public class GetProductByIdEndpoint : ICarterModule
@@ -12,7 +14,7 @@ public class GetProductByIdEndpoint : ICarterModule
             return Results.Ok(response);
         })
         .WithName("GetProductById")
-        .Produces<Product>(StatusCodes.Status200OK)
+        .Produces<ProductDto>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .ProducesProblem(StatusCodes.Status404NotFound)
         .WithSummary("Get product by id.");

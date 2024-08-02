@@ -10,7 +10,8 @@
         "distributedcache": "StartWithoutDebugging",
         "basket.api": "StartDebugging",
         "discount.grpc": "StartDebugging",
-        "ordering.api": "StartDebugging"
+        "ordering.api": "StartDebugging",
+        "yarpapigateway": "StartDebugging"
       }
     }
   }

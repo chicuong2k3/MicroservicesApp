@@ -1,5 +1,9 @@
 ﻿
 namespace Common.Pagination
 {
-    public record PaginationRequest(int PageNumber = 1, int PageSize = 10);
+    public class PaginationRequest
+    {
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+    }
 }

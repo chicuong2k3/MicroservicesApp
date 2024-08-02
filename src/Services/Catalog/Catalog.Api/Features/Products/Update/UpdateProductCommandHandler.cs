@@ -1,14 +1,18 @@
 ﻿
+using Catalog.Api.Data;
+using Catalog.Api.Data.Dtos;
+using Catalog.Api.Extensions;
+
 namespace Catalog.Api.Features.Products.Update;
 
-public class UpdateProductCommand : ICommand<Product>
+public class UpdateProductCommand : ICommand<ProductDto>
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
     public string? Slug { get; set; }
-    public int CategoryId { get; set; }
-    public List<Variant> Variants { get; set; } = new();
+    public string? ThumbnailUrl { get; set; } = default!;
+    public int? CategoryId { get; set; }
 }
 public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
 {
@@ -19,18 +23,18 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
         RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required.")
             .Length(5, 100).WithMessage("Name must have between 5 and 100 characters.");
 
-        RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required.")
-            .Length(10, 500).WithMessage("Description must have between 10 and 500 characters..");
+        RuleFor(x => x.ThumbnailUrl).NotEmpty().WithMessage("ThumbnailUrl is required.")
+            .MaximumLength(1024).WithMessage("ThumbnailUrl must less than 1024 characters.");
 
 
     }
 }
-internal class UpdateProductCommandHandler(IDocumentSession session)
-    : ICommandHandler<UpdateProductCommand, Product>
+internal class UpdateProductCommandHandler(AppDbContext dbContext)
+    : ICommandHandler<UpdateProductCommand, ProductDto>
 {
-    public async Task<Product> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
+    public async Task<ProductDto> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        var product = await session.LoadAsync<Product>(command.Id);
+        var product = await dbContext.Products.FindAsync(command.Id);
 
         if (product == null)
         {
@@ -39,11 +43,19 @@ internal class UpdateProductCommandHandler(IDocumentSession session)
 
         product.Name = command.Name;
         product.Description = command.Description;
-        product.Variants = command.Variants;
+        product.Slug = command.Slug;
 
-        session.Update(product);
-        await session.SaveChangesAsync(cancellationToken);
+        if (command.CategoryId != null)
+        {
+            product.CategoryId = command.CategoryId.Value;
+        }
+        
+        if (command.ThumbnailUrl != null)
+        {
+            product.ThumbnailUrl = command.ThumbnailUrl;
+        }
 
-        return product;
+        await dbContext.SaveChangesAsync();
+        return product.ToProductDto();
     }
 }

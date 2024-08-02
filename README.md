@@ -18,9 +18,9 @@
 
 **Patterns: CQRS.**
 
-**Databases: PostgreSQL as a Document DB.**
+**Databases: MSSQL Server.**
 
-**Libraries: Marten.**
+**Libraries: Entity Framework Core, HtmlAgilityPack.**
 
 ## Basket Service
 

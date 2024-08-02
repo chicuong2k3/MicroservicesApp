@@ -1,4 +1,6 @@
 ﻿
+using Catalog.Api.Data;
+
 namespace Catalog.Api.Features.Categories.Update;
 
 public class UpdateCategoryCommand : ICommand<Category>
@@ -17,16 +19,16 @@ public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCo
         RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required.")
             .Length(5, 100).WithMessage("Name must have between 5 and 100 characters.");
 
-       
+
 
     }
 }
-internal class UpdateCategoryCommandHandler(IDocumentSession session)
+internal class UpdateCategoryCommandHandler(AppDbContext dbContext)
     : ICommandHandler<UpdateCategoryCommand, Category>
 {
     public async Task<Category> Handle(UpdateCategoryCommand command, CancellationToken cancellationToken)
     {
-        var category = await session.LoadAsync<Category>(command.Id);
+        var category = await dbContext.Categories.FindAsync(command.Id);
 
         if (category == null)
         {
@@ -35,9 +37,18 @@ internal class UpdateCategoryCommandHandler(IDocumentSession session)
 
         category.Name = command.Name;
 
+        if (command.Slug != null)
+        {
+            category.Slug = command.Slug;
+        }
 
-        session.Update(category);
-        await session.SaveChangesAsync(cancellationToken);
+        if (command.ParentCategoryId != null)
+        {
+            category.ParentCategoryId = command.ParentCategoryId;
+        }
+
+
+        await dbContext.SaveChangesAsync();
 
         return category;
     }

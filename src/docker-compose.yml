@@ -3,7 +3,7 @@ version: '3.4'
 services:
   
   catalogdb: 
-    image: postgres
+    image: mcr.microsoft.com/mssql/server
 
   basketdb: 
     image: postgres
@@ -41,9 +41,16 @@ services:
       context: .
       dockerfile: Services/Ordering/Ordering.Api/Dockerfile
 
+  yarpapigateway:
+    image: ${DOCKER_REGISTRY-}yarpapigateway
+    build:
+      context: .
+      dockerfile: ApiGateways/YarpApiGateway/Dockerfile
+
 volumes:
   postgres_catalog:
   postgres_basket:
+
 
 
 
